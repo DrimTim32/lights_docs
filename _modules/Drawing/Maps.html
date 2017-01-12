@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Drawing.Maps &#8212; py_proj_lights 0.1.1 documentation</title>
+    <title>drawing.maps &#8212; py_proj_lights 0.1.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -48,7 +48,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for Drawing.Maps</h1><div class="highlight"><pre>
+  <h1>Source code for drawing.maps</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module contains class Map and two methods for drawing (line and car)</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -56,12 +56,12 @@
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 
-<span class="kn">from</span> <span class="nn">Drawing.DataStructures</span> <span class="k">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">RoadSizeVector</span>
-<span class="kn">from</span> <span class="nn">Drawing.DataStructures</span> <span class="k">import</span> <span class="n">get_empty_road</span>
-<span class="kn">from</span> <span class="nn">Drawing.drawing_consts</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">core.data_structures</span> <span class="k">import</span> <span class="n">Position</span>
+<span class="kn">from</span> <span class="nn">drawing.drawing_consts</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="draw_line"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.draw_line">[docs]</a><span class="k">def</span> <span class="nf">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">point1</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">point2</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">):</span>
+<span class="c1"># region drawing funcitons</span>
+<div class="viewcode-block" id="draw_line"><a class="viewcode-back" href="../../drawing.html#drawing.maps.draw_line">[docs]</a><span class="k">def</span> <span class="nf">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draws line between two points on the screen using selected color</span>
 <span class="sd">    :return: None</span>
@@ -69,7 +69,7 @@
     <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="p">[</span><span class="n">point1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point1</span><span class="o">.</span><span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="n">point2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point2</span><span class="o">.</span><span class="n">y</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="draw_car"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.draw_car">[docs]</a><span class="k">def</span> <span class="nf">draw_car</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLUE</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_car"><a class="viewcode-back" href="../../drawing.html#drawing.maps.draw_car">[docs]</a><span class="k">def</span> <span class="nf">draw_car</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLUE</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draws car in selected color and position</span>
 <span class="sd">    :return: None</span>
@@ -77,50 +77,62 @@
     <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="p">[</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">],</span> <span class="n">CAR_RADIUS</span><span class="p">)</span></div>
 
 
+<span class="c1"># endregion</span>
+
+<span class="c1"># region named tuples</span>
 <span class="n">PointsPair</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;PointsPair&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">])</span>
 <span class="n">RoadPointsGroup</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;RoadPointsGroup&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;outside&#39;</span><span class="p">,</span> <span class="s1">&#39;inside&#39;</span><span class="p">])</span>
 <span class="n">MaxOffset</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;MaxOffset&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
 <span class="n">PointsQuadruple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;PointsQuadruple&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">])</span>
 
 
+<span class="c1"># endregion</span>
+
+<span class="c1"># region calculating classes</span>
 <span class="k">class</span> <span class="nc">_MapPointsCalculator</span><span class="p">:</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__calculate_top_points</span><span class="p">(</span><span class="n">middle</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">MaxOffset</span><span class="p">):</span>
-        <span class="n">top_end_left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="n">Position</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">top</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="n">offset</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__calculate_top_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="n">top_end_left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="n">Position</span><span class="p">((</span><span class="n">top</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">offset</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">top_start_left</span> <span class="o">=</span> <span class="n">top_end_left</span> <span class="o">-</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span><span class="p">)</span>
-        <span class="n">top_end_right</span> <span class="o">=</span> <span class="n">top_start_left</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">top</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">top_end_right</span> <span class="o">=</span> <span class="n">top_start_left</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">top</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">top_start_right</span> <span class="o">=</span> <span class="n">top_end_right</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">RoadPointsGroup</span><span class="p">(</span><span class="n">PointsPair</span><span class="p">(</span><span class="n">top_start_right</span><span class="p">,</span> <span class="n">top_end_right</span><span class="p">),</span> <span class="n">PointsPair</span><span class="p">(</span><span class="n">top_start_left</span><span class="p">,</span> <span class="n">top_end_left</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__calculate_left_points</span><span class="p">(</span><span class="n">middle</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">MaxOffset</span><span class="p">):</span>
-        <span class="n">left_start_up</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="n">Position</span><span class="p">(</span><span class="n">offset</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__calculate_left_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="n">left_start_up</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">-</span> <span class="n">Position</span><span class="p">(</span><span class="n">offset</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">left_end_up</span> <span class="o">=</span> <span class="n">left_start_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="o">-</span><span class="n">left</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">left_start_down</span> <span class="o">=</span> <span class="n">left_end_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-        <span class="n">left_end_down</span> <span class="o">=</span> <span class="n">left_start_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+        <span class="n">left_start_down</span> <span class="o">=</span> <span class="n">left_end_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span>
+        <span class="n">left_end_down</span> <span class="o">=</span> <span class="n">left_start_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">RoadPointsGroup</span><span class="p">(</span><span class="n">PointsPair</span><span class="p">(</span><span class="n">left_start_up</span><span class="p">,</span> <span class="n">left_end_up</span><span class="p">),</span> <span class="n">PointsPair</span><span class="p">(</span><span class="n">left_start_down</span><span class="p">,</span> <span class="n">left_end_down</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__calculate_down_points</span><span class="p">(</span><span class="n">middle</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">MaxOffset</span><span class="p">):</span>
-        <span class="n">down_start_left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">down</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="n">offset</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__calculate_down_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="n">down_start_left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">down</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">offset</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">down_end_left</span> <span class="o">=</span> <span class="n">down_start_left</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">down</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span><span class="p">)</span>
-        <span class="n">down_start_right</span> <span class="o">=</span> <span class="n">down_end_left</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">down</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">down_start_right</span> <span class="o">=</span> <span class="n">down_end_left</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">down</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">down_end_right</span> <span class="o">=</span> <span class="n">down_start_right</span> <span class="o">-</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">down</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">RoadPointsGroup</span><span class="p">(</span><span class="n">PointsPair</span><span class="p">(</span><span class="n">down_start_left</span><span class="p">,</span> <span class="n">down_end_left</span><span class="p">),</span> <span class="n">PointsPair</span><span class="p">(</span><span class="n">down_start_right</span><span class="p">,</span> <span class="n">down_end_right</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__calculate_right_points</span><span class="p">(</span><span class="n">middle</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">MaxOffset</span><span class="p">):</span>
-        <span class="n">right_end_up</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">offset</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">__calculate_right_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="n">right_end_up</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">offset</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">right_start_up</span> <span class="o">=</span> <span class="n">right_end_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">right_start_down</span> <span class="o">=</span> <span class="n">right_end_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-        <span class="n">right_end_down</span> <span class="o">=</span> <span class="n">right_start_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+        <span class="n">right_start_down</span> <span class="o">=</span> <span class="n">right_end_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span>
+        <span class="n">right_end_down</span> <span class="o">=</span> <span class="n">right_start_up</span> <span class="o">+</span> <span class="n">Position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">RoadPointsGroup</span><span class="p">(</span><span class="n">PointsPair</span><span class="p">(</span><span class="n">right_start_down</span><span class="p">,</span> <span class="n">right_end_down</span><span class="p">),</span> <span class="n">PointsPair</span><span class="p">(</span><span class="n">right_start_up</span><span class="p">,</span> <span class="n">right_end_up</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">calculate_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: PointsQuadruple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">top_points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">__calculate_top_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">],</span> <span class="n">offset</span><span class="p">)</span>
         <span class="n">left_points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">__calculate_left_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">],</span> <span class="n">offset</span><span class="p">)</span>
-        <span class="n">down_points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">__calculate_down_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;down&quot;</span><span class="p">],</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="n">down_points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">__calculate_down_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">],</span> <span class="n">offset</span><span class="p">)</span>
         <span class="n">right_points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">__calculate_right_points</span><span class="p">(</span><span class="n">middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">],</span> <span class="n">offset</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">PointsQuadruple</span><span class="p">(</span><span class="n">top_points</span><span class="p">,</span> <span class="n">left_points</span><span class="p">,</span> <span class="n">down_points</span><span class="p">,</span> <span class="n">right_points</span><span class="p">)</span>
 
@@ -129,34 +141,74 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__points</span> <span class="o">=</span> <span class="n">points</span>
 
-    <span class="k">def</span> <span class="nf">car_top_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_top_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">up_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_down_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_down_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">down</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">down_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_left_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_left_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">left_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_right_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_right_outside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">right_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_top_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_top_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">down_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_down_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_down_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">down</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">up_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_left_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_left_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">right_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">car_right_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">car_right_inside_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param i: int</span>
+<span class="sd">        :param q: int</span>
+<span class="sd">        :rtype: Position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__points</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">left_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">down_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
-        <span class="n">left_offset</span> <span class="o">=</span> <span class="n">CAR_OFFSET</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">CAR_OFFSET</span> <span class="o">+</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-        <span class="n">right_offset</span> <span class="o">=</span> <span class="n">CAR_OFFSET</span> <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="n">CAR_OFFSET</span> <span class="o">+</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">down_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="n">left_offset</span> <span class="o">=</span> <span class="n">CAR_OFFSET</span> <span class="o">+</span> <span class="n">CAR_RADIUS</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span>
+        <span class="n">right_offset</span> <span class="o">=</span> <span class="n">CAR_OFFSET</span> <span class="o">+</span> <span class="n">CAR_RADIUS</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span>
         <span class="k">return</span> <span class="n">Position</span><span class="p">(</span><span class="n">left_offset</span><span class="p">,</span> <span class="n">right_offset</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
@@ -173,125 +225,149 @@
         <span class="k">return</span> <span class="o">-</span><span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">left_movement_vector</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
 
-<span class="c1"># noinspection PyAttributeOutsideInit</span>
-<div class="viewcode-block" id="Map"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.Map">[docs]</a><span class="k">class</span> <span class="nc">Map</span><span class="p">:</span>
+<span class="c1"># endregion</span>
+
+<div class="viewcode-block" id="create_map_painter"><a class="viewcode-back" href="../../drawing.html#drawing.maps.create_map_painter">[docs]</a><span class="k">def</span> <span class="nf">create_map_painter</span><span class="p">(</span><span class="n">intersection</span><span class="p">,</span> <span class="n">roads</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Map class, used to draw crossroads</span>
+<span class="sd">    Map painter initializer</span>
+<span class="sd">    :param intersection: Intersection data, such as road lengths</span>
+<span class="sd">    :type intersection: Intersection</span>
+<span class="sd">    :param roads: Road definitions top,left,right,bottom</span>
+<span class="sd">    :type roads: dict[str,RoadSizeVector]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">__defaultVectors</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">RoadSizeVector</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="c1"># top</span>
-        <span class="n">RoadSizeVector</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="c1"># left</span>
-        <span class="n">RoadSizeVector</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="c1"># bottom</span>
-        <span class="n">RoadSizeVector</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># right</span>
-    <span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectors</span><span class="o">=</span><span class="n">__defaultVectors</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roads</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-            <span class="s2">&quot;down&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
-            <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
-            <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-        <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__offset</span> <span class="o">=</span> <span class="n">MaxOffset</span><span class="p">(</span>
-            <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__middle</span> <span class="o">=</span> <span class="n">Position</span><span class="p">(</span><span class="n">CONST_OFFSET</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__offset</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
-                                 <span class="n">CONST_OFFSET</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__offset</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">calculate_points</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__middle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__offset</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span> <span class="o">=</span> <span class="n">_MapVectorsCalculator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">board</span> <span class="o">=</span> <span class="n">intersection</span><span class="o">.</span><span class="n">array</span>
 
-<div class="viewcode-block" id="Map.draw"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.Map.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw_directions</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">down</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__seal</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span></div>
+    <span class="n">__offset</span> <span class="o">=</span> <span class="n">MaxOffset</span><span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">,</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">WIDTH_MULTIPLIER</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="sd">&quot;&quot;&quot;:type : MaxOffset&quot;&quot;&quot;</span>
+    <span class="n">__middle</span> <span class="o">=</span> <span class="n">Position</span><span class="p">(</span><span class="n">CONST_OFFSET</span> <span class="o">+</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span> <span class="o">+</span> <span class="n">__offset</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                        <span class="n">CONST_OFFSET</span> <span class="o">+</span> <span class="n">roads</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">LENGTH_MULTIPLIER</span> <span class="o">+</span> <span class="n">__offset</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;:type: Position&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">_MapPointsCalculator</span><span class="o">.</span><span class="n">calculate_points</span><span class="p">(</span><span class="n">__middle</span><span class="p">,</span> <span class="n">roads</span><span class="p">,</span> <span class="n">__offset</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;:type : PointsQuadruple&quot;&quot;&quot;</span>
+
+    <span class="n">_vector_calculator</span> <span class="o">=</span> <span class="n">_MapVectorsCalculator</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;:type : _MapVectorsCalculator&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">MapPainter</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">_vector_calculator</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MapPainter"><a class="viewcode-back" href="../../drawing.html#drawing.maps.MapPainter">[docs]</a><span class="k">class</span> <span class="nc">MapPainter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws map</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board_start_point</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">vectors_calculator</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param board_start_point:</span>
+<span class="sd">        :param board:</span>
+<span class="sd">        :param vectors_calculator:</span>
+<span class="sd">        :param points:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board_start_point</span> <span class="o">=</span> <span class="n">board_start_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">board</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span> <span class="o">=</span> <span class="n">vectors_calculator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">border_points</span> <span class="o">=</span> <span class="n">points</span>
+
+<div class="viewcode-block" id="MapPainter.draw"><a class="viewcode-back" href="../../drawing.html#drawing.maps.MapPainter.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">roads</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws whole state</span>
+<span class="sd">        :param screen:</span>
+<span class="sd">        :param roads:</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span>  <span class="c1"># TODO : remove</span>
+
+        <span class="n">top</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">border_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__draw_borders</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">[</span><span class="n">top</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__seal</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">roads</span><span class="p">,</span> <span class="p">[</span><span class="n">top</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">roads</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">roads</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Draws intervals between every two adjacent roads.</span>
+<span class="sd">        :param roads:</span>
+<span class="sd">        :type points: list[Road]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">directions</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># sealing when road is empty</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">left</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">right</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">right</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">top</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">top</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">down</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">down</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw_seals</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">directions</span><span class="p">)</span>
+        <span class="n">top_road</span><span class="p">,</span> <span class="n">left_road</span><span class="p">,</span> <span class="n">bottom_road</span><span class="p">,</span> <span class="n">right_road</span> <span class="o">=</span> <span class="n">roads</span>
 
-    <span class="k">def</span> <span class="nf">__draw_cars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="n">top</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="n">directions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># region empty roads ifs</span>
+        <span class="c1"># sealing when road is empty</span>
+
+        <span class="k">if</span> <span class="n">left_road</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">left</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">right_road</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">top</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bottom</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">top_road</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">top</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">top</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">bottom_road</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">bottom</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bottom</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="c1"># endregion</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__draw_seals</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">directions</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__draw_cars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws cars on the screen</span>
+<span class="sd">        :param screen:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">top</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars_on_road</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span>
                                  <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_top_outside_direction</span><span class="p">,</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_top_inside_direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_top_inside_direction</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars_on_road</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span>
                                  <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_left_outside_direction</span><span class="p">,</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_left_inside_direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_left_inside_direction</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars_on_road</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span>
                                  <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_right_outside_direction</span><span class="p">,</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_right_inside_direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_right_inside_direction</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars_on_road</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span>
                                  <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_down_outside_direction</span><span class="p">,</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_down_inside_direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span>
-
-    <span class="nd">@top</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span>
-
-    <span class="nd">@right</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span>
-
-    <span class="nd">@left</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;down&quot;</span><span class="p">]</span>
-
-    <span class="nd">@bottom</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roads</span><span class="p">[</span><span class="s2">&quot;down&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_vector_calculator</span><span class="o">.</span><span class="n">car_down_inside_direction</span><span class="p">,</span> <span class="n">bottom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cars_on_board</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_start_point</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Map.draw_seals"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.Map.draw_seals">[docs]</a>    <span class="k">def</span> <span class="nf">draw_seals</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">directions</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">:</span>
-            <span class="n">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
-
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Map.draw_directions"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.Map.draw_directions">[docs]</a>    <span class="k">def</span> <span class="nf">draw_directions</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">directions</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">:</span>
-            <span class="n">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
-
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Map.prepare"><a class="viewcode-back" href="../../Drawing.html#Drawing.Maps.Map.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">screen</span><span class="p">):</span>
-        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Game&quot;</span><span class="p">)</span>
-        <span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">__draw_cars_on_board</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">start_point</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+                <span class="k">if</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">board</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">draw_car</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">start_point</span> <span class="o">+</span>
+                             <span class="n">_MapVectorsCalculator</span><span class="o">.</span><span class="n">down_movement_vector</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                             <span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__draw_cars_on_road</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">outside_dir</span><span class="p">,</span> <span class="n">inside_dir</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">first_indexes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">first</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">out_indexes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">draw_car</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">outside_dir</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">second_indexes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">second</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">draw_car</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">inside_dir</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="n">RED</span><span class="p">)</span></div>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">in_indexes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">draw_car</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">inside_dir</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="n">RED</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__draw_seals</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">directions</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">:</span>
+            <span class="n">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__draw_borders</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">directions</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">:</span>
+            <span class="n">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">draw_line</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MapPainter.prepare"><a class="viewcode-back" href="../../drawing.html#drawing.maps.MapPainter.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">screen</span><span class="p">):</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Simulation&quot;</span><span class="p">)</span>
+        <span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
