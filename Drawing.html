@@ -27,8 +27,8 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="drawing.painters package" href="drawing.painters.html" />
-    <link rel="prev" title="core.simulation.lights_managers package" href="core.simulation.lights_managers.html" /> 
+    <link rel="next" title="simulation package" href="simulation.html" />
+    <link rel="prev" title="data_structures package" href="data_structures.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,10 +41,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="drawing.painters.html" title="drawing.painters package"
+          <a href="simulation.html" title="simulation package"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="core.simulation.lights_managers.html" title="core.simulation.lights_managers package"
+          <a href="data_structures.html" title="data_structures package"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li> 
       </ul>
@@ -57,19 +57,6 @@
             
   <div class="section" id="drawing-package">
 <h1>drawing package<a class="headerlink" href="#drawing-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="drawing.painters.html">drawing.painters package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="drawing.painters.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="drawing.painters.html#module-drawing.painters.lights_painter">drawing.painters.lights_painter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="drawing.painters.html#module-drawing.painters">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -78,25 +65,94 @@
 <p>All consts important for drawing map and cars.
 In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s do more of those!&#8217; rule</p>
 </div>
+<div class="section" id="module-drawing.drawing_helpers">
+<span id="drawing-drawing-helpers-module"></span><h2>drawing.drawing_helpers module<a class="headerlink" href="#module-drawing.drawing_helpers" title="Permalink to this headline">¶</a></h2>
+<p>This file contains helper methods for drawing</p>
+<dl class="function">
+<dt id="drawing.drawing_helpers.draw_car">
+<code class="descclassname">drawing.drawing_helpers.</code><code class="descname">draw_car</code><span class="sig-paren">(</span><em>screen</em>, <em>position</em>, <em>color=(0</em>, <em>0</em>, <em>255)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/drawing_helpers.html#draw_car"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.drawing_helpers.draw_car" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a car in selected color and position
+:return: None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="drawing.drawing_helpers.draw_car_by_value">
+<code class="descclassname">drawing.drawing_helpers.</code><code class="descname">draw_car_by_value</code><span class="sig-paren">(</span><em>screen</em>, <em>position</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/drawing_helpers.html#draw_car_by_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.drawing_helpers.draw_car_by_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws car based on value
+:param screen: screen where to draw a car
+:param position: position of a car
+:param value: value of car (is being converted to color)
+:return: None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="drawing.drawing_helpers.draw_circle">
+<code class="descclassname">drawing.drawing_helpers.</code><code class="descname">draw_circle</code><span class="sig-paren">(</span><em>screen</em>, <em>position</em>, <em>radius</em>, <em>color=(0</em>, <em>0</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/drawing_helpers.html#draw_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.drawing_helpers.draw_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a circle in selected color and position
+:return: None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="drawing.drawing_helpers.draw_line">
+<code class="descclassname">drawing.drawing_helpers.</code><code class="descname">draw_line</code><span class="sig-paren">(</span><em>screen</em>, <em>point1</em>, <em>point2</em>, <em>color=(0</em>, <em>0</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/drawing_helpers.html#draw_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.drawing_helpers.draw_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a line between two points on the screen using selected color
+:return: None</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-drawing.lights_painter">
+<span id="drawing-lights-painter-module"></span><h2>drawing.lights_painter module<a class="headerlink" href="#module-drawing.lights_painter" title="Permalink to this headline">¶</a></h2>
+<p>This file contains LightsPainter class and helper functions</p>
+<dl class="class">
+<dt id="drawing.lights_painter.LightsPainter">
+<em class="property">class </em><code class="descclassname">drawing.lights_painter.</code><code class="descname">LightsPainter</code><span class="sig-paren">(</span><em>top_location</em>, <em>left_location</em>, <em>bottom_location</em>, <em>right_location</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/lights_painter.html#LightsPainter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.lights_painter.LightsPainter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class used to draw lights on screen</p>
+<dl class="method">
+<dt id="drawing.lights_painter.LightsPainter.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><em>screen</em>, <em>lights_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/lights_painter.html#LightsPainter.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.lights_painter.LightsPainter.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws lights on the screen
+:param screen:
+:param lights_dict:
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-drawing.maps">
 <span id="drawing-maps-module"></span><h2>drawing.maps module<a class="headerlink" href="#module-drawing.maps" title="Permalink to this headline">¶</a></h2>
 <p>This module contains class Map and two methods for drawing (line and car)</p>
 <dl class="class">
 <dt id="drawing.maps.MapPainter">
-<em class="property">class </em><code class="descclassname">drawing.maps.</code><code class="descname">MapPainter</code><span class="sig-paren">(</span><em>board_start_point</em>, <em>board</em>, <em>vectors_calculator</em>, <em>points</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#MapPainter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.MapPainter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">drawing.maps.</code><code class="descname">MapPainter</code><span class="sig-paren">(</span><em>board_start_point</em>, <em>intersection</em>, <em>vectors_calculator</em>, <em>points</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#MapPainter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.MapPainter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Draws map</p>
+<dl class="attribute">
+<dt id="drawing.maps.MapPainter.board">
+<code class="descname">board</code><a class="headerlink" href="#drawing.maps.MapPainter.board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns intersection array</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="drawing.maps.MapPainter.draw">
 <code class="descname">draw</code><span class="sig-paren">(</span><em>screen</em>, <em>roads</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#MapPainter.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.MapPainter.draw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws whole state
 :param screen:
-:param roads:</p>
-<table class="docutils field-list" frame="void" rules="none">
+:param roads:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="drawing.maps.MapPainter.get_lights_painter">
+<code class="descname">get_lights_painter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#MapPainter.get_lights_painter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.MapPainter.get_lights_painter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ligths_painter</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#drawing.lights_painter.LightsPainter" title="drawing.lights_painter.LightsPainter">LightsPainter</a></td>
 </tr>
 </tbody>
 </table>
@@ -105,7 +161,8 @@ In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s 
 <dl class="staticmethod">
 <dt id="drawing.maps.MapPainter.prepare">
 <em class="property">static </em><code class="descname">prepare</code><span class="sig-paren">(</span><em>screen</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#MapPainter.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.MapPainter.prepare" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Prepares pygame for simulation</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -127,70 +184,17 @@ In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s 
 
 </dd></dl>
 
-<dl class="class">
-<dt id="drawing.maps.PointsPair">
-<em class="property">class </em><code class="descclassname">drawing.maps.</code><code class="descname">PointsPair</code><span class="sig-paren">(</span><em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="headerlink" href="#drawing.maps.PointsPair" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
-<dl class="attribute">
-<dt id="drawing.maps.PointsPair.end">
-<code class="descname">end</code><a class="headerlink" href="#drawing.maps.PointsPair.end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="drawing.maps.PointsPair.start">
-<code class="descname">start</code><a class="headerlink" href="#drawing.maps.PointsPair.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="drawing.maps.PointsQuadruple">
-<em class="property">class </em><code class="descclassname">drawing.maps.</code><code class="descname">PointsQuadruple</code><span class="sig-paren">(</span><em>top</em>, <em>left</em>, <em>down</em>, <em>right</em><span class="sig-paren">)</span><a class="headerlink" href="#drawing.maps.PointsQuadruple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
-<dl class="attribute">
-<dt id="drawing.maps.PointsQuadruple.down">
-<code class="descname">down</code><a class="headerlink" href="#drawing.maps.PointsQuadruple.down" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="drawing.maps.PointsQuadruple.left">
-<code class="descname">left</code><a class="headerlink" href="#drawing.maps.PointsQuadruple.left" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="drawing.maps.PointsQuadruple.right">
-<code class="descname">right</code><a class="headerlink" href="#drawing.maps.PointsQuadruple.right" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 3</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="drawing.maps.PointsQuadruple.top">
-<code class="descname">top</code><a class="headerlink" href="#drawing.maps.PointsQuadruple.top" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="drawing.maps.RoadPointsGroup">
-<em class="property">class </em><code class="descclassname">drawing.maps.</code><code class="descname">RoadPointsGroup</code><span class="sig-paren">(</span><em>outside</em>, <em>inside</em><span class="sig-paren">)</span><a class="headerlink" href="#drawing.maps.RoadPointsGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
-<dl class="attribute">
-<dt id="drawing.maps.RoadPointsGroup.inside">
-<code class="descname">inside</code><a class="headerlink" href="#drawing.maps.RoadPointsGroup.inside" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="drawing.maps.RoadPointsGroup.outside">
-<code class="descname">outside</code><a class="headerlink" href="#drawing.maps.RoadPointsGroup.outside" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
+<dl class="function">
+<dt id="drawing.maps.calculate_points">
+<code class="descclassname">drawing.maps.</code><code class="descname">calculate_points</code><span class="sig-paren">(</span><em>middle</em>, <em>roads</em>, <em>offset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#calculate_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.calculate_points" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="data_structures.html#data_structures.points_structures.PointsQuadruple" title="data_structures.points_structures.PointsQuadruple">PointsQuadruple</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -201,20 +205,6 @@ In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s 
 :type intersection: Intersection
 :param roads: Road definitions top,left,right,bottom
 :type roads: dict[str,RoadSizeVector]</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="drawing.maps.draw_car">
-<code class="descclassname">drawing.maps.</code><code class="descname">draw_car</code><span class="sig-paren">(</span><em>screen</em>, <em>position</em>, <em>color=(0</em>, <em>0</em>, <em>255)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#draw_car"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.draw_car" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draws car in selected color and position
-:return: None</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="drawing.maps.draw_line">
-<code class="descclassname">drawing.maps.</code><code class="descname">draw_line</code><span class="sig-paren">(</span><em>screen</em>, <em>point1</em>, <em>point2</em>, <em>color=(0</em>, <em>0</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/drawing/maps.html#draw_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#drawing.maps.draw_line" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draws line between two points on the screen using selected color
-:return: None</p>
 </dd></dl>
 
 </div>
@@ -232,9 +222,10 @@ In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s 
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">drawing package</a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-drawing.drawing_consts">drawing.drawing_consts module</a></li>
+<li><a class="reference internal" href="#module-drawing.drawing_helpers">drawing.drawing_helpers module</a></li>
+<li><a class="reference internal" href="#module-drawing.lights_painter">drawing.lights_painter module</a></li>
 <li><a class="reference internal" href="#module-drawing.maps">drawing.maps module</a></li>
 <li><a class="reference internal" href="#module-drawing">Module contents</a></li>
 </ul>
@@ -242,11 +233,11 @@ In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s 
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="core.simulation.lights_managers.html"
-                        title="previous chapter">core.simulation.lights_managers package</a></p>
+  <p class="topless"><a href="data_structures.html"
+                        title="previous chapter">data_structures package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="drawing.painters.html"
-                        title="next chapter">drawing.painters package</a></p>
+  <p class="topless"><a href="simulation.html"
+                        title="next chapter">simulation package</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -278,10 +269,10 @@ In the name of &#8216;Namespaces are one honking great idea &#8211; let&#8217;s 
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="drawing.painters.html" title="drawing.painters package"
+          <a href="simulation.html" title="simulation package"
              >next</a> |</li>
         <li class="right" >
-          <a href="core.simulation.lights_managers.html" title="core.simulation.lights_managers package"
+          <a href="data_structures.html" title="data_structures package"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li> 
       </ul>

@@ -1,0 +1,372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>simulation.simulation &#8212; py_proj_lights 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for simulation.simulation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This file contains simulation class&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">data_structures</span> <span class="k">import</span> <span class="n">str_to_direction</span><span class="p">,</span> <span class="n">Orientation</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">TurnDirection</span>
+<span class="kn">from</span> <span class="nn">drawing.maps</span> <span class="k">import</span> <span class="n">create_map_painter</span>
+<span class="kn">from</span> <span class="nn">.data_collector</span> <span class="k">import</span> <span class="n">DataCollector</span>
+<span class="kn">from</span> <span class="nn">.intersection</span> <span class="k">import</span> <span class="n">Intersection</span><span class="p">,</span> <span class="n">IntersectionProperties</span>
+<span class="kn">from</span> <span class="nn">.lights_managers.lights_phase</span> <span class="k">import</span> <span class="n">LightsPhase</span><span class="p">,</span> <span class="n">DirectionsInfo</span>
+<span class="kn">from</span> <span class="nn">.road</span> <span class="k">import</span> <span class="n">RoadSizeVector</span><span class="p">,</span> <span class="n">get_empty_road</span>
+
+
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulation class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">car_generator</span><span class="p">,</span> <span class="n">lights_manager</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__data_collector</span> <span class="o">=</span> <span class="n">DataCollector</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__probabilities</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">___create_probability_info</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">directions_turns</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__lanes_info</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">__create_lanes_info</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">directions_turns</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__car_generator</span> <span class="o">=</span> <span class="n">car_generator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__probabilities</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span> <span class="o">=</span> <span class="n">lights_manager</span><span class="p">(</span><span class="n">Simulation</span><span class="o">.</span><span class="n">create_lights_phases</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">directions_turns</span><span class="p">),</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">__lanes_info</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__intersection</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">__create_roads_and_intersection</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">directions_lanes</span><span class="p">,</span>
+                                                                                       <span class="n">config</span><span class="o">.</span><span class="n">roads_length</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__map</span> <span class="o">=</span> <span class="n">create_map_painter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__intersection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Simulation.update"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates simulation state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update_out</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__intersection</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update_in</span><span class="p">()</span></div>
+        <span class="c1"># print(self.__lights_manager.current_phase)</span>
+        <span class="c1"># print(self.__data_collector.data)</span>
+
+    <span class="k">def</span> <span class="nf">__update_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">direction_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">str_to_direction</span><span class="p">(</span><span class="n">direction_str</span><span class="p">)</span>
+            <span class="n">road</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="n">direction_str</span><span class="p">]</span>
+            <span class="n">road</span><span class="o">.</span><span class="n">update_out</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">lane_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">road</span><span class="o">.</span><span class="n">out_width</span><span class="p">):</span>
+                <span class="n">road</span><span class="o">.</span><span class="n">push_car_out</span><span class="p">(</span><span class="n">lane_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__intersection</span><span class="o">.</span><span class="n">pull_car</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__update_in</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">direction_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">road</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="n">direction_str</span><span class="p">]</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">str_to_direction</span><span class="p">(</span><span class="n">direction_str</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">lane_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">road</span><span class="o">.</span><span class="n">in_width</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_safe_passage</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">road</span><span class="o">.</span><span class="n">has_waiting_car</span><span class="p">(</span><span class="n">lane_index</span><span class="p">):</span>
+                        <span class="n">car</span> <span class="o">=</span> <span class="n">road</span><span class="o">.</span><span class="n">pull_car</span><span class="p">(</span><span class="n">lane_index</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__data_collector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">car</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">current_phase</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__intersection</span><span class="o">.</span><span class="n">push_car</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">,</span> <span class="n">car</span><span class="p">)</span>
+                <span class="n">road</span><span class="o">.</span><span class="n">update_in</span><span class="p">(</span><span class="n">lane_index</span><span class="p">)</span>
+                <span class="n">road</span><span class="o">.</span><span class="n">push_car_in</span><span class="p">(</span><span class="n">lane_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__car_generator</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Simulation.get_number_of_phases"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation.get_number_of_phases">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_of_phases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return:number of lights phases</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">phases</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Simulation.set_phases_durations"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation.set_phases_durations">[docs]</a>    <span class="k">def</span> <span class="nf">set_phases_durations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_durations</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        sets new duration of lights phases</span>
+<span class="sd">        :param new_durations: new durations</span>
+<span class="sd">        :type new_durations: list[int]</span>
+<span class="sd">        :return: none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">phase_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">phases</span><span class="p">)):</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="n">phase_id</span><span class="p">]</span>
+            <span class="n">phase</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">new_durations</span><span class="p">[</span><span class="n">phase_id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Simulation.get_lights"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation.get_lights">[docs]</a>    <span class="k">def</span> <span class="nf">get_lights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: light for all directions</span>
+<span class="sd">        :rtype: dict[Directions, list[bool]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lights</span> <span class="o">=</span> <span class="p">{</span><span class="n">Directions</span><span class="o">.</span><span class="n">TOP</span><span class="p">:</span> <span class="p">[],</span>
+                  <span class="n">Directions</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="p">[],</span>
+                  <span class="n">Directions</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">:</span> <span class="p">[],</span>
+                  <span class="n">Directions</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">lights</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">lane_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="n">direction</span><span class="o">.</span><span class="n">__str__</span><span class="p">()]</span><span class="o">.</span><span class="n">in_width</span><span class="p">):</span>
+                <span class="n">lights</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">is_green</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">lights</span></div>
+
+    <span class="k">def</span> <span class="nf">__is_safe_passage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">):</span>
+        <span class="n">is_green</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">is_green</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">)</span>
+        <span class="n">current_phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">current_phase</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current_phase</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">is_green</span>
+        <span class="k">if</span> <span class="n">current_phase</span><span class="o">.</span><span class="n">left</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lanes_info</span><span class="p">[</span><span class="n">direction</span><span class="p">][</span><span class="n">lane_index</span><span class="p">]</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">is_green</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phase_time</span> <span class="o">=</span> <span class="n">current_phase</span><span class="o">.</span><span class="n">duration</span>
+            <span class="n">op_dir</span> <span class="o">=</span> <span class="n">Directions</span><span class="p">((</span><span class="n">direction</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__probabilities</span><span class="p">[</span><span class="n">direction</span><span class="p">][</span><span class="n">lane_index</span><span class="p">])</span>
+            <span class="n">op_weight</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">lane_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__lanes_info</span><span class="p">[</span><span class="n">op_dir</span><span class="p">])):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lanes_info</span><span class="p">[</span><span class="n">op_dir</span><span class="p">][</span><span class="n">lane_index</span><span class="p">]</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+                    <span class="n">op_weight</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__probabilities</span><span class="p">[</span><span class="n">op_dir</span><span class="p">][</span><span class="n">lane_index</span><span class="p">])</span>
+            <span class="n">w_sum</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">+</span> <span class="n">op_weight</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">w_sum</span>
+            <span class="n">op_weight</span> <span class="o">=</span> <span class="n">op_weight</span> <span class="o">/</span> <span class="n">w_sum</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="n">phase_time</span><span class="p">)</span>
+            <span class="n">op_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">op_weight</span> <span class="o">*</span> <span class="n">phase_time</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">my_turn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">in_phase_time</span> <span class="o">&lt;=</span> <span class="n">time</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">my_turn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lights_manager</span><span class="o">.</span><span class="n">in_phase_time</span> <span class="o">&gt;</span> <span class="n">op_time</span>
+
+            <span class="k">if</span> <span class="n">my_turn</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">my_turn</span> <span class="ow">and</span> <span class="n">is_green</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">turn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="n">direction</span><span class="o">.</span><span class="n">__str__</span><span class="p">()]</span><span class="o">.</span><span class="n">first_waiting_car_turn</span><span class="p">(</span><span class="n">lane_index</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">turn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">is_green</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">is_green</span> <span class="ow">and</span> <span class="n">turn</span> <span class="o">==</span> <span class="n">TurnDirection</span><span class="o">.</span><span class="n">RIGHT</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Top roads&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Right roads&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Left roads&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Bottom roads&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__roads</span><span class="p">[</span><span class="s2">&quot;bottom&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return:  map</span>
+<span class="sd">        :rtype: MapPainter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__map</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns all points [top, left, bottom, right]&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: data collected by simulation</span>
+<span class="sd">        :rtype: dict[list[LanePhaseData]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data_collector</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__create_roads_and_intersection</span><span class="p">(</span><span class="n">directions_lanes</span><span class="p">,</span> <span class="n">roads_length</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param directions_lanes: information about number of lanes</span>
+<span class="sd">        :param roads_length: roads length</span>
+<span class="sd">        :return: roads and intersection</span>
+<span class="sd">        :rtype: dict[str, Road], Intersection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">directions_properties</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">direction_id</span> <span class="ow">in</span> <span class="n">directions_lanes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">directions_lanes</span><span class="p">[</span><span class="n">direction_id</span><span class="p">]</span>
+            <span class="n">directions_properties</span><span class="p">[</span><span class="n">direction_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">RoadSizeVector</span><span class="p">(</span><span class="n">roads_length</span><span class="p">,</span>
+                                                                 <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                                 <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">roads</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">directions_properties</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                 <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">directions_properties</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                 <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">directions_properties</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                 <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="n">get_empty_road</span><span class="p">(</span><span class="n">directions_properties</span><span class="p">[</span><span class="mi">3</span><span class="p">])}</span>
+
+        <span class="k">return</span> <span class="n">roads</span><span class="p">,</span> <span class="n">Intersection</span><span class="p">(</span><span class="n">IntersectionProperties</span><span class="p">(</span><span class="n">directions_properties</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Simulation.create_lights_phases"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation.create_lights_phases">[docs]</a>    <span class="k">def</span> <span class="nf">create_lights_phases</span><span class="p">(</span><span class="n">directions_turns</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param directions_turns: information about directions</span>
+<span class="sd">        :return: lights phases</span>
+<span class="sd">        :rtype: list[LightsPhase]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phases</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">direction_id</span> <span class="ow">in</span> <span class="n">directions_turns</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">directions_turns</span><span class="p">[</span><span class="n">direction_id</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">lane</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
+                <span class="n">turns</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">check_turns</span><span class="p">(</span><span class="n">lane</span><span class="p">)</span>
+                <span class="n">phase</span> <span class="o">=</span> <span class="n">LightsPhase</span><span class="p">(</span><span class="n">DirectionsInfo</span><span class="p">(</span><span class="n">turns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">turns</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">turns</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">turns</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
+                                    <span class="n">Simulation</span><span class="o">.</span><span class="n">__check_orientation</span><span class="p">(</span><span class="n">direction_id</span><span class="p">),</span> <span class="mi">20</span><span class="p">)</span>
+                <span class="n">is_new_phase</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">existing_phase_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">phases</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">phase</span> <span class="o">==</span> <span class="n">phases</span><span class="p">[</span><span class="n">existing_phase_id</span><span class="p">]:</span>
+                        <span class="n">phases</span><span class="p">[</span><span class="n">existing_phase_id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">phase</span>
+                        <span class="n">is_new_phase</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">is_new_phase</span><span class="p">:</span>
+                    <span class="n">phases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
+        <span class="c1"># print(phases)</span>
+        <span class="k">return</span> <span class="n">phases</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__create_lanes_info</span><span class="p">(</span><span class="n">directions_turns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param directions_turns: information about directions</span>
+<span class="sd">        :return: lanes info</span>
+<span class="sd">        :rtype: dict[Directions, list[DirectionsInfo]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lanes_info</span> <span class="o">=</span> <span class="p">{</span><span class="n">Directions</span><span class="o">.</span><span class="n">TOP</span><span class="p">:</span> <span class="p">[],</span>
+                      <span class="n">Directions</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="p">[],</span>
+                      <span class="n">Directions</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">:</span> <span class="p">[],</span>
+                      <span class="n">Directions</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">direction_id</span> <span class="ow">in</span> <span class="n">directions_turns</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">directions_turns</span><span class="p">[</span><span class="n">direction_id</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">lane</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
+                <span class="n">turns</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">check_turns</span><span class="p">(</span><span class="n">lane</span><span class="p">)</span>
+                <span class="n">lanes_info</span><span class="p">[</span><span class="n">Directions</span><span class="p">(</span><span class="n">direction_id</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">DirectionsInfo</span><span class="p">(</span><span class="n">turns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">turns</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">turns</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">turns</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">lanes_info</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Simulation.check_turns"><a class="viewcode-back" href="../../simulation.html#simulation.simulation.Simulation.check_turns">[docs]</a>    <span class="k">def</span> <span class="nf">check_turns</span><span class="p">(</span><span class="n">lane</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param lane: lane data from config</span>
+<span class="sd">        :return: possible turn direction from lane</span>
+<span class="sd">        :rtype: list[bool]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">turns</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">turn_direction</span> <span class="ow">in</span> <span class="n">lane</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">turn_direction</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">lane</span><span class="p">[</span><span class="n">turn_direction</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">turns</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">turns</span><span class="p">[</span><span class="n">turn_direction</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">turns</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">___create_probability_info</span><span class="p">(</span><span class="n">directions_turns</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param directions_turns: information about directions</span>
+<span class="sd">        :return: probabilities for car generation</span>
+<span class="sd">        :rtype: dict[Directions,list[list[float]]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="p">{</span><span class="n">Directions</span><span class="o">.</span><span class="n">TOP</span><span class="p">:</span> <span class="p">[],</span>
+                         <span class="n">Directions</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="p">[],</span>
+                         <span class="n">Directions</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">:</span> <span class="p">[],</span>
+                         <span class="n">Directions</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">direction_id</span> <span class="ow">in</span> <span class="n">directions_turns</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">directions_turns</span><span class="p">[</span><span class="n">direction_id</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">lane</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
+                <span class="n">direction_probabilities</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">Directions</span><span class="p">(</span><span class="n">direction_id</span><span class="p">)]</span>
+                <span class="n">direction_probabilities</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+                <span class="n">lane_probabilities</span> <span class="o">=</span> <span class="n">direction_probabilities</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">turn_direction</span> <span class="ow">in</span> <span class="n">lane</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">lane_probabilities</span><span class="p">[</span><span class="n">turn_direction</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">lane</span><span class="p">[</span><span class="n">turn_direction</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># print(probabilities)</span>
+        <span class="k">return</span> <span class="n">probabilities</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__check_orientation</span><span class="p">(</span><span class="n">direction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param direction: checks orientation of given direction</span>
+<span class="sd">        :type direction: Direction</span>
+<span class="sd">        :return: orientation</span>
+<span class="sd">        :rtype: Orientation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Orientation</span><span class="p">(</span><span class="n">direction</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Anna gese, Marcin Malinowski, Bartosz Soból.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

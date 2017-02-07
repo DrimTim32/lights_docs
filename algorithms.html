@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>algorithms package &#8212; py_proj_lights 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="configuration package" href="configuration.html" />
+    <link rel="prev" title="Welcome to py_proj_lights’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configuration.html" title="configuration package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to py_proj_lights’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="algorithms-package">
+<h1>algorithms package<a class="headerlink" href="#algorithms-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-algorithms.algorithms">
+<span id="algorithms-algorithms-module"></span><h2>algorithms.algorithms module<a class="headerlink" href="#module-algorithms.algorithms" title="Permalink to this headline">¶</a></h2>
+<p>This file contains algorithms used in optimizer</p>
+<dl class="function">
+<dt id="algorithms.algorithms.avg">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">avg</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#avg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.avg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns average of the vector</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.algorithms.get_norm">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">get_norm</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#get_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.get_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns norm by string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.algorithms.logistic">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">logistic</code><span class="sig-paren">(</span><em>x_0</em>, <em>max_value</em>, <em>midpoint</em>, <em>steepness</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#logistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.logistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logistic cumulative distribution curve
+:param x_0: point where function is going to be calculated
+:param max_value: function max value
+:param midpoint: midpoint
+:param steepness: how much function shoud be steep
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.algorithms.metric_euclid">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">metric_euclid</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#metric_euclid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.metric_euclid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns euclidean norm from vector</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.algorithms.negative_gompertz">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">negative_gompertz</code><span class="sig-paren">(</span><em>x_0</em>, <em>asymptote</em>, <em>inflection</em>, <em>rate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#negative_gompertz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.negative_gompertz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negative gompertz function.
+:param x_0: point where function is going to be calculated
+:param asymptote: curve asymptote
+:param inflection: inflection of the curve
+:param rate: rate parameter
+:type x_0: float
+:type asymptote: float
+:type inflection: float
+:type rate: float
+:rtype: float</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.algorithms.norm_max">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">norm_max</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#norm_max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.norm_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns maximum norm from vector</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algorithms.algorithms.norm_min">
+<code class="descclassname">algorithms.algorithms.</code><code class="descname">norm_min</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms.html#norm_min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms.norm_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns minimum norm from vector</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-algorithms.algorithms_exceptions">
+<span id="algorithms-algorithms-exceptions-module"></span><h2>algorithms.algorithms_exceptions module<a class="headerlink" href="#module-algorithms.algorithms_exceptions" title="Permalink to this headline">¶</a></h2>
+<p>This file contains OptimisationException class</p>
+<dl class="exception">
+<dt id="algorithms.algorithms_exceptions.OptimisationException">
+<em class="property">exception </em><code class="descclassname">algorithms.algorithms_exceptions.</code><code class="descname">OptimisationException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/algorithms_exceptions.html#OptimisationException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.algorithms_exceptions.OptimisationException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Clas for exceptions in this module</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-algorithms.optimiser">
+<span id="algorithms-optimiser-module"></span><h2>algorithms.optimiser module<a class="headerlink" href="#module-algorithms.optimiser" title="Permalink to this headline">¶</a></h2>
+<p>This file contains optimiser class</p>
+<dl class="class">
+<dt id="algorithms.optimiser.Optimiser">
+<em class="property">class </em><code class="descclassname">algorithms.optimiser.</code><code class="descname">Optimiser</code><span class="sig-paren">(</span><em>config</em>, <em>car_generator</em>, <em>lights_manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/optimiser.html#Optimiser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.optimiser.Optimiser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class is tool for optimising crossroads</p>
+<dl class="attribute">
+<dt id="algorithms.optimiser.Optimiser.max_lights_len">
+<code class="descname">max_lights_len</code><em class="property"> = 64</em><a class="headerlink" href="#algorithms.optimiser.Optimiser.max_lights_len" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="algorithms.optimiser.Optimiser.min_lights_len">
+<code class="descname">min_lights_len</code><em class="property"> = 2</em><a class="headerlink" href="#algorithms.optimiser.Optimiser.min_lights_len" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="algorithms.optimiser.Optimiser.optimise">
+<code class="descname">optimise</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/algorithms/optimiser.html#Optimiser.optimise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#algorithms.optimiser.Optimiser.optimise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimises simulation
+:return: report with most optimal light phases
+:rtype: tuple(string,list[int])</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="algorithms.optimiser.SimulationData">
+<em class="property">class </em><code class="descclassname">algorithms.optimiser.</code><code class="descname">SimulationData</code><span class="sig-paren">(</span><em>norm</em>, <em>car_sum</em>, <em>wait_sum</em>, <em>vect</em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.optimiser.SimulationData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="algorithms.optimiser.SimulationData.car_sum">
+<code class="descname">car_sum</code><a class="headerlink" href="#algorithms.optimiser.SimulationData.car_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="algorithms.optimiser.SimulationData.norm">
+<code class="descname">norm</code><a class="headerlink" href="#algorithms.optimiser.SimulationData.norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="algorithms.optimiser.SimulationData.vect">
+<code class="descname">vect</code><a class="headerlink" href="#algorithms.optimiser.SimulationData.vect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="algorithms.optimiser.SimulationData.wait_sum">
+<code class="descname">wait_sum</code><a class="headerlink" href="#algorithms.optimiser.SimulationData.wait_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-algorithms">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-algorithms" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">algorithms package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-algorithms.algorithms">algorithms.algorithms module</a></li>
+<li><a class="reference internal" href="#module-algorithms.algorithms_exceptions">algorithms.algorithms_exceptions module</a></li>
+<li><a class="reference internal" href="#module-algorithms.optimiser">algorithms.optimiser module</a></li>
+<li><a class="reference internal" href="#module-algorithms">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to py_proj_lights&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configuration.html"
+                        title="next chapter">configuration package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/algorithms.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configuration.html" title="configuration package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to py_proj_lights’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Anna gese, Marcin Malinowski, Bartosz Soból.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>
