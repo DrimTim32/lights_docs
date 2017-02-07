@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>simulation.road &#8212; py_proj_lights 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for simulation.road</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">File containing Road class and supporting tools</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+
+<span class="n">RoadSizeVector</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;RoadSizeVector&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="s1">&#39;out_lanes_count&#39;</span><span class="p">,</span> <span class="s1">&#39;in_lanes_count&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="get_empty_road"><a class="viewcode-back" href="../../simulation.html#simulation.road.get_empty_road">[docs]</a><span class="k">def</span> <span class="nf">get_empty_road</span><span class="p">(</span><span class="n">size_vector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param size_vector: road properties vector</span>
+<span class="sd">    :type size_vector : RoadSizeVector</span>
+<span class="sd">    :return: empty Road</span>
+<span class="sd">    :rtype: Road</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out_lanes_count</span> <span class="o">=</span> <span class="n">size_vector</span><span class="o">.</span><span class="n">out_lanes_count</span>
+    <span class="n">in_lanes_count</span> <span class="o">=</span> <span class="n">size_vector</span><span class="o">.</span><span class="n">in_lanes_count</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">size_vector</span><span class="o">.</span><span class="n">length</span>
+
+    <span class="k">def</span> <span class="nf">get_empty_list</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: empty list</span>
+<span class="sd">        :rtype: list[None]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">([</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">)])</span>
+
+    <span class="k">def</span> <span class="nf">get_empty_list_of_lists</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param count: number of lists</span>
+<span class="sd">        :return: list of empty lists</span>
+<span class="sd">        :rtype: list[list[None]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">([</span><span class="n">get_empty_list</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">)])</span>
+
+    <span class="k">return</span> <span class="n">Road</span><span class="p">([</span><span class="n">get_empty_list_of_lists</span><span class="p">(</span><span class="n">out_lanes_count</span><span class="p">),</span>
+                 <span class="n">get_empty_list_of_lists</span><span class="p">(</span><span class="n">in_lanes_count</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="Road"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road">[docs]</a><span class="k">class</span> <span class="nc">Road</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Road class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">road_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        initializes road from lists of lanes</span>
+<span class="sd">        :param road_list: list of lanes</span>
+<span class="sd">        :type road_list list[list[list[Car]]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">road_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">road_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">road_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;all out lanes must have equal length&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">road_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">road_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">road_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;all in lanes must have equal length&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span> <span class="o">=</span> <span class="n">road_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span> <span class="o">=</span> <span class="n">road_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out_len</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">in_len</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">in_len</span><span class="p">,</span> <span class="n">out_len</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Road.update_out"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.update_out">[docs]</a>    <span class="k">def</span> <span class="nf">update_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        updates positions of cars going out of intersection</span>
+<span class="sd">        :return: none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">lane_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_width</span><span class="p">):</span>
+            <span class="n">lane</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__len__</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">lane</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lane</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">lane</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Road.update_in"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.update_in">[docs]</a>    <span class="k">def</span> <span class="nf">update_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        updates posiitons of cars arriving intersection</span>
+<span class="sd">        :param lane_index: index of lane to perform update on</span>
+<span class="sd">        :return: none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__len__</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">waiting_time</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Road.push_car_out"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.push_car_out">[docs]</a>    <span class="k">def</span> <span class="nf">push_car_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">,</span> <span class="n">car</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        pushes car from intersection to specific lane on out_road</span>
+<span class="sd">        :param lane_index: index of lane</span>
+<span class="sd">        :param car: car tu push on road</span>
+<span class="sd">        :return: none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">car</span></div>
+
+<div class="viewcode-block" id="Road.push_car_in"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.push_car_in">[docs]</a>    <span class="k">def</span> <span class="nf">push_car_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">,</span> <span class="n">car</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        pushes car arriving to intersection to specific lane on in_road</span>
+<span class="sd">        :param lane_index: index of lane</span>
+<span class="sd">        :param car: car tu push on road</span>
+<span class="sd">        :return: none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">car</span></div>
+
+<div class="viewcode-block" id="Road.pull_car"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.pull_car">[docs]</a>    <span class="k">def</span> <span class="nf">pull_car</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pulls car from specific lane on road to intersection</span>
+<span class="sd">        :param lane_index: index of lane</span>
+<span class="sd">        :return: pulled car</span>
+<span class="sd">        :rtype: Car</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">car</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">car</span></div>
+
+<div class="viewcode-block" id="Road.has_waiting_car"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.has_waiting_car">[docs]</a>    <span class="k">def</span> <span class="nf">has_waiting_car</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if there is a car waiting to enter intersection on specific lane</span>
+<span class="sd">        :param lane_index: index of lane</span>
+<span class="sd">        :return: if there is a car waiting to enter intersection</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: length of the road</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__len__</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">out_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: number of out lanes</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">in_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: number of in lanes</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: number of lanes</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">out_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: out indexes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">lane_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">field_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">])):</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">lane_index</span><span class="p">,</span> <span class="n">field_index</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">in_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: in indexes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Road.first_waiting_car_turn"><a class="viewcode-back" href="../../simulation.html#simulation.road.Road.first_waiting_car_turn">[docs]</a>    <span class="k">def</span> <span class="nf">first_waiting_car_turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lane_index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param lane_index: index of lane</span>
+<span class="sd">        :return: turn direction of first care on lane</span>
+<span class="sd">        :rtype: TurnDirection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">car</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_lanes</span><span class="p">[</span><span class="n">lane_index</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">car</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">car</span><span class="o">.</span><span class="n">turn_direction</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Anna gese, Marcin Malinowski, Bartosz Soból.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

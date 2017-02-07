@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>algorithms.optimiser &#8212; py_proj_lights 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for algorithms.optimiser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This file contains optimiser class&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">simulation</span> <span class="k">import</span> <span class="n">Simulation</span>
+<span class="kn">from</span> <span class="nn">.algorithms</span> <span class="k">import</span> <span class="n">avg</span><span class="p">,</span> <span class="n">get_norm</span><span class="p">,</span> <span class="n">negative_gompertz</span><span class="p">,</span> <span class="n">logistic</span>
+<span class="kn">from</span> <span class="nn">.algorithms_exceptions</span> <span class="k">import</span> <span class="n">OptimisationException</span>
+
+<span class="n">SimulationData</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;SimulationData&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;car_sum&#39;</span><span class="p">,</span> <span class="s1">&#39;wait_sum&#39;</span><span class="p">,</span> <span class="s1">&#39;vect&#39;</span><span class="p">],</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># pylint: disable=C0103</span>
+
+
+<div class="viewcode-block" id="Optimiser"><a class="viewcode-back" href="../../algorithms.html#algorithms.optimiser.Optimiser">[docs]</a><span class="k">class</span> <span class="nc">Optimiser</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This class is tool for optimising crossroads&quot;&quot;&quot;</span>
+    <span class="n">min_lights_len</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">max_lights_len</span> <span class="o">=</span> <span class="mi">64</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">car_generator</span><span class="p">,</span> <span class="n">lights_manager</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car_generator</span> <span class="o">=</span> <span class="n">car_generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lights_manager</span> <span class="o">=</span> <span class="n">lights_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span><span class="s1">&#39;euclid&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repetition_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">simulation_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_possible_wait_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">step_count</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roads_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_possible_car_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">step_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_values</span> <span class="o">=</span> <span class="n">Optimiser</span><span class="o">.</span><span class="n">max_lights_len</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_random_change</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_values</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">__randomize_time_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Randomizes time change</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_random_change</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__car_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns car curve value</span>
+<span class="sd">        :param point: point where curve should be calculated</span>
+<span class="sd">        :type point: float</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">negative_gompertz</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">step_count</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__time_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns time curve value</span>
+<span class="sd">        :param point: point where curve should be calculated</span>
+<span class="sd">        :type point: float</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">logistic</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">step_count</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">),</span>
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">step_count</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__calcule_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">car_count</span><span class="p">,</span> <span class="n">wait_count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates characteristic function</span>
+<span class="sd">        :param car_count: car count value</span>
+<span class="sd">        :param wait_count: wait count value</span>
+<span class="sd">        :type car_count: float</span>
+<span class="sd">        :type wait_count: float</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__car_equation</span><span class="p">(</span><span class="n">car_count</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__time_equation</span><span class="p">(</span><span class="n">wait_count</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__generate_start_lights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates start lights</span>
+<span class="sd">        :param count: count of lights</span>
+<span class="sd">        :type count: int</span>
+<span class="sd">        :rtype list[int]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">init_values</span><span class="p">]</span> <span class="o">*</span> <span class="n">count</span>
+
+    <span class="k">def</span> <span class="nf">__get_start_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lights</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates start report</span>
+<span class="sd">        :param lights: lights values list</span>
+<span class="sd">        :type lights: list[int]</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span>
+        <span class="n">report_string</span> <span class="o">=</span> <span class="s2">&quot;Report generated {:</span><span class="si">%d</span><span class="s2">, %b %Y}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;[Start Values]</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">simulation count = </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">simulation_count</span><span class="p">))</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">generated lights = </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lights</span><span class="p">))</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">simulation was executed </span><span class="si">{}</span><span class="s2"> times</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">simulation_count</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">each simulation contained </span><span class="si">{}</span><span class="s2"> steps</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">step_count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">report_string</span>
+
+    <span class="k">def</span> <span class="nf">__iterate_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simulation</span><span class="p">,</span> <span class="n">lights</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulates one simulation</span>
+<span class="sd">        :param simulation: simulation object</span>
+<span class="sd">        :type simulation: Simulation</span>
+<span class="sd">        :param lights: list of lights times</span>
+<span class="sd">        :type lights: list[int]</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">simulation</span><span class="o">.</span><span class="n">set_phases_durations</span><span class="p">(</span><span class="n">lights</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">step_count</span><span class="p">):</span>
+            <span class="n">simulation</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">current_data</span>  <span class="c1"># type: dict[int, list[LanePhaseData]]</span>
+        <span class="n">phase_count</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_number_of_phases</span><span class="p">()</span>
+        <span class="n">vect</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">phase_count</span>
+        <span class="n">vector</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">phase_count</span>
+        <span class="n">car_sum</span><span class="p">,</span> <span class="n">wait_sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">phase_no</span><span class="p">,</span> <span class="n">phase_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">car_count_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">car_count</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">phase_data</span><span class="p">]</span>
+            <span class="n">wait_count_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">average_waiting_time</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">phase_data</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">car_count_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">car_count_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">wait_count_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">wait_count_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">car_count</span> <span class="o">=</span> <span class="n">avg</span><span class="p">(</span><span class="n">car_count_list</span><span class="p">)</span>
+            <span class="n">wait_count</span> <span class="o">=</span> <span class="n">avg</span><span class="p">(</span><span class="n">wait_count_list</span><span class="p">)</span>
+            <span class="n">vector</span><span class="p">[</span><span class="n">phase_no</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calcule_function</span><span class="p">(</span><span class="n">car_count</span><span class="p">,</span> <span class="n">wait_count</span><span class="p">)</span>
+            <span class="n">vect</span><span class="p">[</span><span class="n">phase_no</span><span class="p">]</span> <span class="o">+=</span> <span class="n">vector</span><span class="p">[</span><span class="n">phase_no</span><span class="p">]</span>
+            <span class="n">car_sum</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">car_count_list</span><span class="p">)</span>
+            <span class="n">wait_sum</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">total_waiting_time</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">phase_data</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">SimulationData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vector</span><span class="p">),</span> <span class="n">car_sum</span><span class="p">,</span> <span class="n">wait_sum</span><span class="p">,</span> <span class="n">vect</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__simulation_data_string</span><span class="p">(</span><span class="n">simulation_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates string from simulation data</span>
+<span class="sd">        :param simulation_data: simulation data</span>
+<span class="sd">        :type simulation_data: SimulationData</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">report_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">car passed: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">car_sum</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">time wasted by being stopped: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">wait_sum</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">accomplished norm: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">norm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">report_string</span>
+
+    <span class="k">def</span> <span class="nf">__change_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">vect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Changes times based on vector</span>
+<span class="sd">        :param times: light times</span>
+<span class="sd">        :type times: list[int]</span>
+<span class="sd">        :param vect: vector</span>
+<span class="sd">        :type vect: list[float]</span>
+<span class="sd">        :rtype : list[int]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_index</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">vect</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">min_index</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">vect</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">times</span><span class="p">[</span><span class="n">max_index</span><span class="p">]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__randomize_time_change</span><span class="p">()</span>
+        <span class="n">times</span><span class="p">[</span><span class="n">min_index</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__randomize_time_change</span><span class="p">()</span>
+        <span class="n">times</span><span class="p">[</span><span class="n">max_index</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Optimiser</span><span class="o">.</span><span class="n">min_lights_len</span><span class="p">,</span> <span class="n">times</span><span class="p">[</span><span class="n">max_index</span><span class="p">])</span>
+        <span class="n">times</span><span class="p">[</span><span class="n">min_index</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">min_index</span><span class="p">],</span> <span class="n">Optimiser</span><span class="o">.</span><span class="n">max_lights_len</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">times</span>
+
+<div class="viewcode-block" id="Optimiser.optimise"><a class="viewcode-back" href="../../algorithms.html#algorithms.optimiser.Optimiser.optimise">[docs]</a>    <span class="k">def</span> <span class="nf">optimise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Optimises simulation</span>
+<span class="sd">        :return: report with most optimal light phases</span>
+<span class="sd">        :rtype: tuple(string,list[int])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">better_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">bad_simulation</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">last_exception</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">car_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_start_lights</span><span class="p">(</span><span class="n">simulation</span><span class="o">.</span><span class="n">get_number_of_phases</span><span class="p">())</span>
+        <span class="n">best_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_start_lights</span><span class="p">(</span><span class="n">simulation</span><span class="o">.</span><span class="n">get_number_of_phases</span><span class="p">())</span>
+
+        <span class="n">simulation</span><span class="o">.</span><span class="n">set_phases_durations</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_start_report</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;[Initial data]</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data about progress is not aviable in python &lt; 3.3 because of flush performance&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executing initial simulation&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="n">simulation_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__iterate_simulation</span><span class="p">(</span><span class="n">simulation</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="n">Optimiser</span><span class="o">.</span><span class="n">__simulation_data_string</span><span class="p">(</span><span class="n">simulation_data</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;[Data after optimalization]</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">best_simulation_data</span> <span class="o">=</span> <span class="n">SimulationData</span><span class="p">(</span>
+            <span class="n">simulation_data</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">simulation_data</span><span class="o">.</span><span class="n">car_sum</span><span class="p">,</span> <span class="n">simulation_data</span><span class="o">.</span><span class="n">wait_sum</span><span class="p">,</span>
+            <span class="n">simulation_data</span><span class="o">.</span><span class="n">vect</span><span class="p">)</span>  <span class="c1"># type: SimulationData</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__change_times</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">simulation_data</span><span class="o">.</span><span class="n">vect</span><span class="p">)</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_data</span><span class="o">.</span><span class="n">simulation_count</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">bad_simulation</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">OptimisationException</span><span class="p">(</span>
+                    <span class="s2">&quot;Something wrong happend more than </span><span class="si">{}</span><span class="s2"> times, latest cought exception : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bad_simulation</span><span class="p">,</span>
+                                                                                                      <span class="n">last_exception</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">car_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+                <span class="n">simulation</span><span class="o">.</span><span class="n">set_phases_durations</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+                <span class="n">current_simulation_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__iterate_simulation</span><span class="p">(</span><span class="n">simulation</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">current_simulation_data</span><span class="o">.</span><span class="n">norm</span> <span class="o">&lt;</span> <span class="n">best_simulation_data</span><span class="o">.</span><span class="n">norm</span><span class="p">:</span>
+                    <span class="n">best_simulation_data</span> <span class="o">=</span> <span class="n">SimulationData</span><span class="p">(</span>
+                        <span class="n">current_simulation_data</span><span class="o">.</span><span class="n">norm</span><span class="p">,</span> <span class="n">current_simulation_data</span><span class="o">.</span><span class="n">car_sum</span><span class="p">,</span> <span class="n">current_simulation_data</span><span class="o">.</span><span class="n">wait_sum</span>
+                        <span class="p">,</span> <span class="n">current_simulation_data</span><span class="o">.</span><span class="n">vect</span><span class="p">)</span>
+                    <span class="n">best_times</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">times</span><span class="p">]</span>
+                    <span class="n">better_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">best_times</span><span class="p">)):</span>
+                    <span class="n">times</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_times</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__change_times</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">best_simulation_data</span><span class="o">.</span><span class="n">vect</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{0:.0f}% o</span><span class="s2">f optimisation done&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(((</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">count</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="n">last_exception</span> <span class="o">=</span> <span class="n">ex</span>
+                <span class="n">bad_simulation</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="n">Optimiser</span><span class="o">.</span><span class="n">__simulation_data_string</span><span class="p">(</span><span class="n">best_simulation_data</span><span class="p">)</span>
+        <span class="n">report_string</span> <span class="o">+=</span> <span class="s2">&quot;[Additional data]</span><span class="se">\n\t</span><span class="s2">New norm was choosen </span><span class="si">{}</span><span class="s2"> times</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">better_count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">report_string</span><span class="p">,</span> <span class="n">times</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Anna gese, Marcin Malinowski, Bartosz Soból.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

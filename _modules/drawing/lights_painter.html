@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>drawing.lights_painter &#8212; py_proj_lights 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for drawing.lights_painter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This file contains LightsPainter class and helper functions&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">data_structures.enums</span> <span class="k">import</span> <span class="n">Directions</span>
+<span class="kn">from</span> <span class="nn">data_structures.points_structures</span> <span class="k">import</span> <span class="n">PointsQuadruple</span>
+<span class="kn">from</span> <span class="nn">data_structures.vector</span> <span class="k">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">drawing.drawing_consts</span> <span class="k">import</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">RED</span>
+<span class="kn">from</span> <span class="nn">drawing.drawing_consts</span> <span class="k">import</span> <span class="n">LIGHT_OFFSET</span><span class="p">,</span> <span class="n">LIGHT_RADIUS</span>
+<span class="kn">from</span> <span class="nn">drawing.drawing_helpers</span> <span class="k">import</span> <span class="n">draw_circle</span>
+
+
+<span class="k">def</span> <span class="nf">_draw_light</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws light on the screen</span>
+<span class="sd">    :param screen: screen to draw on</span>
+<span class="sd">    :param position: light position</span>
+<span class="sd">    :param color: light color</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">draw_circle</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">LIGHT_RADIUS</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_draw_lights</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">start_point</span><span class="p">,</span> <span class="n">move_vector</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws set of lights distanced by  2 * move_vector</span>
+<span class="sd">    :param screen: screen to draw on</span>
+<span class="sd">    :param start_point: first light position</span>
+<span class="sd">    :param move_vector: distance vector</span>
+<span class="sd">    :param colors_array: color list</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors_array</span><span class="p">):</span>
+        <span class="n">_draw_light</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">start_point</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">index</span> <span class="o">*</span> <span class="n">move_vector</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LightsPainter"><a class="viewcode-back" href="../../drawing.html#drawing.lights_painter.LightsPainter">[docs]</a><span class="k">class</span> <span class="nc">LightsPainter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class used to draw lights on screen&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_location</span><span class="p">,</span> <span class="n">left_location</span><span class="p">,</span> <span class="n">bottom_location</span><span class="p">,</span> <span class="n">right_location</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inits whole painter</span>
+<span class="sd">        :param top_location: upper lights location start</span>
+<span class="sd">        :param left_location: left lights location start</span>
+<span class="sd">        :param bottom_location: bottom lights location start</span>
+<span class="sd">        :param right_location: right lights location start</span>
+<span class="sd">        :type top_location: Vector</span>
+<span class="sd">        :type left_location: Vector</span>
+<span class="sd">        :type bottom_location: Vector</span>
+<span class="sd">        :type right_location: Vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__top_vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">LIGHT_OFFSET</span> <span class="o">+</span> <span class="n">LIGHT_RADIUS</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__left_vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">LIGHT_OFFSET</span> <span class="o">+</span> <span class="n">LIGHT_RADIUS</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__down_vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">LIGHT_OFFSET</span> <span class="o">+</span> <span class="n">LIGHT_RADIUS</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__right_vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">((</span><span class="n">LIGHT_OFFSET</span> <span class="o">+</span> <span class="n">LIGHT_RADIUS</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">top_location</span> <span class="o">=</span> <span class="n">top_location</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__top_vector</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__left_vector</span>
+        <span class="n">left_location</span> <span class="o">=</span> <span class="n">left_location</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__down_vector</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__left_vector</span>
+        <span class="n">bottom_location</span> <span class="o">=</span> <span class="n">bottom_location</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__down_vector</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__right_vector</span>
+        <span class="n">right_location</span> <span class="o">=</span> <span class="n">right_location</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__top_vector</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__right_vector</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__locations</span> <span class="o">=</span> <span class="n">PointsQuadruple</span><span class="p">(</span><span class="n">top_location</span><span class="p">,</span> <span class="n">left_location</span><span class="p">,</span> <span class="n">bottom_location</span><span class="p">,</span> <span class="n">right_location</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LightsPainter.draw"><a class="viewcode-back" href="../../drawing.html#drawing.lights_painter.LightsPainter.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">lights_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws lights on the screen</span>
+<span class="sd">        :param screen:</span>
+<span class="sd">        :param lights_dict:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">lights</span> <span class="ow">in</span> <span class="n">lights_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__draw</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">lights</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">light_colors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws lights on the screen depending of road direction</span>
+<span class="sd">        :param screen: screen to draw</span>
+<span class="sd">        :param direction: road direction</span>
+<span class="sd">        :param light_colors: light colors list</span>
+<span class="sd">        :type direction: Directions</span>
+<span class="sd">        :type light_colors: list[tuple(int,int,int)]</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">light_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">GREEN</span> <span class="k">if</span> <span class="n">q</span> <span class="k">else</span> <span class="n">RED</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">light_colors</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">Directions</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__draw_bottom</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">light_colors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">Directions</span><span class="o">.</span><span class="n">TOP</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__draw_top</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">light_colors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">Directions</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__draw_right</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">light_colors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">Directions</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__draw_left</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">light_colors</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__draw_top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param screen:</span>
+<span class="sd">        :param colors_array:</span>
+<span class="sd">        :type colors_vector: list[tuple(int,int,int)]</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_draw_lights</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__locations</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__left_vector</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__draw_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param screen:</span>
+<span class="sd">        :param colors_array:</span>
+<span class="sd">        :type colors_vector: list[tuple(int,int,int)]</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_draw_lights</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__locations</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__down_vector</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__draw_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param screen:</span>
+<span class="sd">        :param colors_array:</span>
+<span class="sd">        :type colors_vector: list[tuple(int,int,int)]</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_draw_lights</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__locations</span><span class="o">.</span><span class="n">down</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__right_vector</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__draw_right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param screen:</span>
+<span class="sd">        :param colors_array:</span>
+<span class="sd">        :type colors_vector: list[tuple(int,int,int)]</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_draw_lights</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__locations</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__top_vector</span><span class="p">,</span> <span class="n">colors_array</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">py_proj_lights 0.1.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Anna gese, Marcin Malinowski, Bartosz Soból.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>
