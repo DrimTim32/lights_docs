@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<font face="arial">
+<div style="margin: 0 auto; max-width:960px">
+<h2>Optymalizator sygnalizacji – opis projektu</h2>
+Projekt zakładał optymalizację sekwencji zmian świateł drogowych na skrzyżowaniu o 
+zadanym rozmiarze z uwzględnieniem średniego natężenia ruchu w poszczególnych kierunkach. </br>
+
+Danymi wejściowymi do programu są następujące informacje zawarte w pliku config.json:
+<ul>
+<li>  dla każdej możliwej drogi dojazdowej do skrzyżowania:
+	<ul>
+	<li> id drogi (górna = 0, lewa = 1, dolna = 2, prawa = 3)</li>
+	<li> liczba pasów dojazdowych do skrzyżowania</li>
+	<li> liczba pasów pozwalających na zjazd ze skrzyżowania tą drogą</li>
+	<li> specyfikację wszystkich pasów dojazdowych do skrzyżowania (kolejność podawanych pasów interpretowana jest w kolejności od tego znajdującego się najbliżej pobocza do tego który znajduje się najbliżej pasów zjazdowych ze skrzyżowania), dla każdego pasa – lista możliwych kierunków jazdy:
+		<ul>
+		<li> kierunek ruchu (w prawo = 1, prosto = 2, w lewo = 3)</li>
+		<li> prawdopodobieństwo</li>
+		<li> informację czy dozwolony jest z tego pasa ruch bezkolizyjny w danym kierunku</li>
+		</ul>
+	</li>
+	</ul>
+</li>
+<li> długość dróg</li>
+<li> liczba odświeżeń symulacji </li>
+<li> liczba symulacji, która zostanie wykonana na dana optymalizacje</li>
+</ul>
+Działanie programu skupia się wokół 2 funkcjonalności:
+<ul>
+<li> wyznaczenie optymalnej sekwencji świateł</li>
+<li> wizualizacja wyznaczonej wcześniej optymalnej sekwencji świateł w kontekście zasymulowanego ruchu drogowego na wygenerowanych skrzyżowaniu o zadanej topologii</li>
+</ul>
+<h4>Optymalizacja:</h4>
+Głównym celem optymalizacji sygnalizacji było takie dostosowanie czasu palenia się świateł, aby zmaksymalizowana została liczba samochodów przejeżdżających przez skrzyżowanie w danej jednostce czasu przy jednoczesnym zminimalizowaniu czasu oczekiwania na wjazd na skrzyżowanie. 
+</br>
+Optymalizacja skupia się na średnim czasie przejazdu samochodów przez skrzyżowanie.
+</br>
+Liczbę samochodów, które przejechały przez skrzyżowanie oraz średni czas czekania przed płytą skrzyżowania w danej fazie obkładane są normą L2 a następnie łączone przy pomocy dwóch rozkładów:
+<ol>
+<li> Rozkład logistyczny – zastosowany do badania normy średniego czasu oczekiwania na przejazd przez skrzyżowanie
+<li> Negatywny rozkład Gompertza – zastosowany do badania normy z liczby samochodów przejeżdżających przez skrzyżowanie
+</ol>
+Współczynniki tych rozkładów są dobrane w taki sposób, aby dawały najlepszy wynik gdy skrzyżowanie osiąga najwyższą wydajność. </br></br>
+Następnie obliczana jest norma jako suma tych rozkładów, a na jej podstawie porównywane są odpowiednie ustawienia świateł i wybierane jest to, które ma najmniejszą normę.
+</br></br>
+Kolejne sekwencje sygnalizacji poddawane analizie przez zaprezentowany wyżej algorytm optymalizacji generowane są poprzez modyfikację wyników uzyskanych w poprzednim obiegu algorytmu (w stanie początkowym wszystkie wartości wynoszą 32).
+</br>
+Dzieje się to poprzez zwiększenie czasu dla najmniej optymalnego pasa ruchu oraz zmniejszenie czasu dla najbardziej optymalnego pasa ruchu.
+</br></br>
+  W obu przypadkach zmiana ta jest dokonywana poprzez dodanie / odjęcie losowej liczby od czasu dla danego pasa ruchu.
+
+Liczba przeprowadzonych kroków optymalizacji zależna jest od danych dostarczonych przez użytkownika w pliku konfiguracyjnym.
+</br></br>
+W przypadku, gdy w wyniku optymalizacji osiągnięty zostanie najmniejszy możliwy czas palenia się świateł (wynoszący 2 jednostki czasu) dla jednego pasa, któremu towarzyszy jednoczesne osiągnięcie największego możliwego czasu palenia się światła (wynoszącego 64) dla innego pasa, oznacza to, że skrzyżowanie zostało źle zaprojektowane.
+</div>
+</font>
+</body>
+</html>
